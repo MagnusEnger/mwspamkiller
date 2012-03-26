@@ -1,0 +1,5 @@
+wikihost: example.org
+wikipath: ''
+wikiuser: MyUser
+wikipass: MyPassword
+wikimsg: MWSpamKiller
