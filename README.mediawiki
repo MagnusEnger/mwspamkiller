@@ -1,0 +1,11 @@
+=mwspamkiller=
+
+A script that loops through all users in a wiki, letting the user choose to mark them as good or bad. 
+
+Good users get added to a YAML file (goodusers.yaml) for future reference. 
+
+Bad users have all their pages deleted and are themselves blocked indefinitely. 
+
+=TODO= 
+
+* This only handles pages the spammer created, if they only edited an existing page there will be trouble...
