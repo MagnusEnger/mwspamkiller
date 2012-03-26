@@ -57,11 +57,11 @@ if ($debug) { print "Logged in to the wiki\n"; }
 
 my @users = $bot->get_allusers();
 foreach my $user ( @users ) {
-  print "$user";
+  print "$user" if $verbose;
   if ( $bot->is_blocked( $user ) ) {
-    print " BLOCKED\n";
+    print " BLOCKED\n" if $verbose;
   } elsif ( $goodusers{$user} ) {
-    print " GOOD USER\n";
+    print " GOOD USER\n" if $verbose;
   } else {
   
     print "\n";
