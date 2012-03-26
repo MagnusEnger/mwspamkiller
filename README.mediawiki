@@ -9,3 +9,4 @@ Bad users have all their pages deleted and are themselves blocked indefinitely.
 =TODO= 
 
 * This only handles pages the spammer created, if they only edited an existing page there will be trouble...
+* Beware of the default limit of 500 on [http://search.cpan.org/~lifeguard/MediaWiki-Bot-3.005000/lib/MediaWiki/Bot.pm#get_allusers get_allusers]
