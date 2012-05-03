@@ -26,6 +26,9 @@ use Modern::Perl;
 my $goodusersfile = 'goodusers.yaml';
 my ($configfile, $verbose, $debug) = get_options();
 
+my $blocked = 0;
+my $deleted = 0;
+
 # Open the config
 if ( !-e $configfile ) {
   die "Could not find $configfile\n";
@@ -75,27 +78,38 @@ foreach my $user ( @users ) {
 
     # A common array
     my @contribs;
-    push @contribs, @maincontribs;
-    push @contribs, @usercontribs;
+    if ( $maincontribs[0] ) {
+      push @contribs, @maincontribs;
+    }
+    if ( $usercontribs[0] ) {
+      push @contribs, @usercontribs;
+    }
 
     # Print pages
-    foreach my $contrib ( @contribs ) {
-      print Dumper $contrib if $debug;
-      print "\t* ", $contrib->{'title'}, "\n";
-      print "\tBruker: ", $contrib->{'user'}, "\n";
-      print "\t", $contrib->{'comment'}, "\n";
+    if ( $contribs[0] ) {
+      foreach my $contrib ( @contribs ) {
+        print Dumper $contrib if $debug;
+        if ( $contrib->{'title'} ) {
+          print "\t* Title: ", $contrib->{'title'},   "\n";
+          print "\tUser:    ", $contrib->{'user'},    "\n";
+          print "\tComment: ", $contrib->{'comment'}, "\n";
+        }
+      }
     }
     
-    print "Good or bad? [Gb]: ";
+    print "\tGood, bad or unknown? [G/b/u]: ";
     my $gb = <>;
     chomp($gb);
-    if ($gb eq 'b' || $gb eq 'B') {
+    if ($gb eq 'u' || $gb eq 'U') {
+      # Do nothing
+    } elsif ($gb eq 'b' || $gb eq 'B') {
       # Delete pages
       # FIXME This will only work as long as the user did not edit existing 
       # pages...
       foreach my $contrib ( @contribs ) {
         print "\tDeleting ", $contrib->{'title'}, "...\n";
         $bot->delete($contrib->{'title'}, 'Sletting av spam');
+        $deleted++;
       }
       # Block user
       print "\tBlocking $user...\n";
@@ -106,6 +120,7 @@ foreach my $user ( @users ) {
         anononly    => 1,
         autoblock   => 1,
       });
+      $blocked++;
     } else {
       $goodusers{$user}++;
       # Save immediately
@@ -113,6 +128,8 @@ foreach my $user ( @users ) {
     }
   }
 }
+
+print "Blocked $blocked user(s), deleted $deleted page(s).\n";
 
 ###
 
