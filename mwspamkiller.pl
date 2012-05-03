@@ -80,6 +80,7 @@ foreach my $user ( @users ) {
 
     # Print pages
     foreach my $contrib ( @contribs ) {
+      print Dumper $contrib if $debug;
       print "\t* ", $contrib->{'title'}, "\n";
       print "\tBruker: ", $contrib->{'user'}, "\n";
       print "\t", $contrib->{'comment'}, "\n";
